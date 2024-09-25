@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Web Page</title>
+    <script>
+        // Function to update the time and date
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            const dateString = now.toLocaleDateString();
+            document.getElementById("time").textContent = timeString;
+            document.getElementById("date").textContent = dateString;
+        }
+
+        // Call the function initially and then every second
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+</head>
+<body>
+    <h1>Current Time and Date</h1>
+    <p id="time"></p>
+    <p id="date"></p>
+</body>
+</html>
