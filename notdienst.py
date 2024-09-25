@@ -20,6 +20,21 @@ today_json = ""
 
 
 def create_table_elements(local_pharmacy_list):
+    """
+    Creates an HTML table from a list of local pharmacies.
+
+    Parameters:
+        local_pharmacy_list (list): A list of dictionaries containing pharmacy information.
+            Each dictionary should have the following keys:
+                - name: The name of the pharmacy.
+                - address: The address of the pharmacy.
+                - phone: The phone number of the pharmacy.
+                - service_time: The service time of the pharmacy.
+                - distance_text: The distance to the pharmacy.
+
+    Returns:
+        str: The HTML table as a string.
+    """
     max_table_rows = os.getenv("MAX-TABLE-ROWS")
     local_table_html = ""
 
@@ -55,7 +70,8 @@ def create_html_page_with_logo(pharmacy_list):
     table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
     table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
     table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
-    table_html += f"<tr><td>ab</td><td>datum: {datetime.now().strftime('%d.%m.%Y')} 08:30 Uhr</td><td> </td><td> </td><td> </td></tr>\n"
+    table_html += f"<tr><td>ab</td><td>datum: {datetime.now().strftime('%d.%m.%Y')} 08:30 Uhr</td>\
+        <td> </td><td> </td><td> </td></tr>\n"
     table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
     table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
     table_html += create_table_elements(pharmacy_list)
@@ -82,7 +98,7 @@ def create_html_page_with_logo(pharmacy_list):
             <div style="position: relative;">
                 <div style="position: relative; top: 10px; left: 20px;">
                     <h1 style="margin-bottom: 100px;">{html_title}</h1>
-                    <img src="Logo_Linden-Apotheke.jpg" style="position: absolute; top: -50px; right: 10px;">
+                    <img src={logo_jpg} style="position: absolute; top: -50px; right: 10px;">
                     {table_html}
                     <br>
                     <p>Generated on { formatted_datetime }</p>
@@ -106,10 +122,8 @@ def create_html_page_with_logo(pharmacy_list):
     </body>
 </html>
     """
-
-    with open(html_page, "w") as f:
+    with open(html_page, "w", encoding="utf-8") as f:
         f.write(html_content)
-
     print(f"HTML page created at: {html_page}")
 
 
@@ -177,14 +191,23 @@ def save_json_to_file(json_data, filename):
     """
     # json_data = '{"name": "John Doe", "age": 35, "email": "john.doe@example.com"}'
 
-    with open(filename, "w") as f:
+    with open(filename, "w", encoding="utf-8") as f:
         json.dump((json_data), f)
         # json.dump(json.loads(json_data), f)
     print(f"JSON data saved to '{filename}' file.")
 
 
 def load_json_from_file(filename):
-    with open(filename, "r") as f:
+    """
+    Loads JSON data from a file.
+
+    Args:
+        filename (str): The name of the file to load JSON data from.
+
+    Returns:
+        dict: The loaded JSON data.
+    """
+    with open(filename, "r", encoding="utf-8") as f:
         data_json = json.load(f)
     print(f"Loaded JSON data from '{filename}' file.")
     print(f"Data: {data_json}")
@@ -220,6 +243,20 @@ def check_json_to_file(json_data, filename1="yesterday.json", filename2="today.j
 
 
 def main():
+    """
+    The main function that orchestrates the entire process of scraping pharmacy data from a webpage,
+    extracting and sorting the data, and then saving it to JSON files and creating an HTML page.
+
+    This function uses the Playwright library to launch a headless browser, navigate to the webpage,
+    wait for the pharmacy entries to load, and then extract the data from the table. It then sorts the
+    data by distance and saves it to JSON files. Finally, it creates an HTML page with the sorted data.
+
+    Parameters:
+        None
+
+    Returns:
+        None
+    """
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
@@ -242,8 +279,11 @@ def main():
                 ".searchResultEntry", timeout=10000
             )  # Timeout set to 10 seconds for loading the entries
             print("Pharmacy entries found.")  # Debug message for entries found
-        except:
-            print("Pharmacy entries not found or loading took too long.")
+        except TimeoutError:
+            print(f"Loading the {full_url} took too long. ")
+            return
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
             return
 
         # Call the function to extract pharmacy data
@@ -281,10 +321,8 @@ if __name__ == "__main__":
 
 
 # from jinja2 import Template
-
 # # Get the current date and time
 # now = datetime.datetime.now()
-
 # # Create a Jinja2 template with a placeholder for the date and time
 # template = Template("""
 # <!DOCTYPE html>
