@@ -5,3 +5,7 @@ tr {
 tr:nth-child(even) {
     background-color: #fff;
 }
+td {
+    padding-left: 20px;
+    padding-right: 20px;
+}
