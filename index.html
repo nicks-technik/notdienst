@@ -1,0 +1,60 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Aktuelle Apotheken-Notdienstbereitschaft</title>
+        <meta http-equiv="refresh" content="60">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="./styles.css">
+    </head>
+        <body>
+            <p>Aktuelle Uhrzeit: <span id="time-display"></span></p>
+
+            <div style="position: relative;">
+                <div style="position: relative; top: 10px; left: 20px;">
+                    <h1 style="margin-bottom: 100px;">Aktuelle Apotheken-Notdienstbereitschaft</h1>
+                    <img src="Logo_Linden-Apotheke.jpg" style="position: absolute; top: -50px; right: 10px;">
+                    <table>
+  <tr><th>Apotheke</th><th>Adresse</th>        <th>Telefon</th><th>Zeiten</th><th>Luftlinie</th></tr>
+  <tr><td>Frohsinn-Apotheke</td><td>Frohsinnstr. 13, 63739, Aschaffenburg</td>            <td>06021 / 27142</td><td>von 25.09.24 08:30 Uhr
+bis 26.09.24 08:30 Uhr</td>            <td>2,3 km</td></tr>
+  <tr><td>Franken-Apotheke</td><td>Aschaffenburger Str. 148, 63773, Goldbach</td>            <td>06021 / 54540</td><td>von 24.09.24 08:30 Uhr
+bis 25.09.24 08:30 Uhr</td>            <td>4,1 km</td></tr>
+  <tr><td>Marien-Apotheke</td><td>Hahnenkammstr. 19, 63791, Karlstein</td>            <td>06188 / 990122</td><td>von 25.09.24 08:30 Uhr
+bis 26.09.24 08:30 Uhr</td>            <td>14,2 km</td></tr>
+<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+<tr><td>ab</td><td>datum: 25.09.2024 08:30 Uhr</td><td> </td><td> </td><td> </td></tr>
+<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+  <tr><td>Frohsinn-Apotheke</td><td>Frohsinnstr. 13, 63739, Aschaffenburg</td>            <td>06021 / 27142</td><td>von 25.09.24 08:30 Uhr
+bis 26.09.24 08:30 Uhr</td>            <td>2,3 km</td></tr>
+  <tr><td>Marien-Apotheke</td><td>Hahnenkammstr. 19, 63791, Karlstein</td>            <td>06188 / 990122</td><td>von 25.09.24 08:30 Uhr
+bis 26.09.24 08:30 Uhr</td>            <td>14,2 km</td></tr>
+  <tr><td>Franken-Apotheke</td><td>Odenwaldstr. 8, 63939, Wörth a.Main</td>            <td>09372 / 944494</td><td>von 25.09.24 08:00 Uhr
+bis 26.09.24 08:00 Uhr</td>            <td>27,7 km</td></tr>
+</table>
+
+                    <br>
+                    <p>Generated on 25:09:2024 13:37:56</p>
+
+                </div>
+            </div>
+            <script>
+                function updateTime() {
+                    const currentTime = new Date();
+                    /*
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+                    */
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+
+                    const timeString = currentTime.toLocaleString('de-DE', options);
+                    document.getElementById('time-display').textContent = timeString+ ' Uhr';
+                }
+
+                setInterval(updateTime, 1000); // Update the time every second
+            </script>
+    </body>
+</html>
+    

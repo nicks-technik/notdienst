@@ -1,10 +1,10 @@
 #!/bin/bash
 
-cd ~/dev/NotdienstWeb
-cd html
+cd ~/dev/notdienst
+# cd html
 python -m http.server -d . -b 0.0.0.0 8080
 
-cd ..
+# cd ..
 source ./.venv/bin/activate
 
 while true; do
