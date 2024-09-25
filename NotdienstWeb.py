@@ -3,7 +3,7 @@
 # pip install python-dotenv
 # pip install playwright
 # playwright install
-# playwright install-deps 
+# playwright install-deps
 
 import os
 import json
@@ -278,3 +278,22 @@ def main():
 if __name__ == "__main__":
     # while True:
     main()
+
+
+# from jinja2 import Template
+
+# # Get the current date and time
+# now = datetime.datetime.now()
+
+# # Create a Jinja2 template with a placeholder for the date and time
+# template = Template("""
+# <!DOCTYPE html>
+# <html>
+# <head>
+# <title>Generated HTML</title>
+# </head>
+# <body>
+# <h1>Generated on {{ now }}</h1>
+# </body>
+# </html>
+# """)
