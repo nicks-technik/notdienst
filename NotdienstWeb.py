@@ -18,13 +18,14 @@ today_json = ""
 
 def create_table_elements(local_pharmacy_list):
     max_table_rows = os.getenv("MAX-TABLE-ROWS")
+    local_table_html = ""
 
     for index, pharmacy in enumerate(local_pharmacy_list, start=1):
         if index > int(max_table_rows):
             break
         local_table_html += f"  <tr><td>{pharmacy['name']}</td><td>{pharmacy['address']}</td>\
-        <td>{pharmacy['phone']}</td><td>{pharmacy['service_time']}</td>\
-        <td>{pharmacy['distance']}</td></tr>\n"
+            <td>{pharmacy['phone']}</td><td>{pharmacy['service_time']}</td>\
+            <td>{pharmacy['distance_text']}</td></tr>\n"
     return local_table_html
 
 
@@ -45,14 +46,17 @@ def create_html_page_with_logo(pharmacy_list):
     table_html = "<table>\n"
     table_html += "  <tr><th>Apotheke</th><th>Adresse</th>\
         <th>Telefon</th><th>Zeiten</th><th>Luftlinie</th></tr>\n"
-    for pharmacy in yesterday_json:
-        table_html += f"  <tr><td>{pharmacy['name']}</td><td>{pharmacy['address']}</td>\
-        <td>{pharmacy['phone']}</td><td>{pharmacy['service_time']}</td>\
-        <td>{pharmacy['distance']}</td></tr>\n"
-    for pharmacy in pharmacy_list:
-        table_html += f"  <tr><td>{pharmacy['name']}</td><td>{pharmacy['address']}</td>\
-        <td>{pharmacy['phone']}</td><td>{pharmacy['service_time']}</td>\
-        <td>{pharmacy['distance']}</td></tr>\n"
+
+    table_html += create_table_elements(yesterday_json)
+    # table_html += "<tr></tr>\n"
+    table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
+    table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
+    table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
+    table_html += f"<tr><td>ab</td><td>datum: {datetime.now().strftime('%d.%m.%Y')} 08:30 Uhr</td><td> </td><td> </td><td> </td></tr>\n"
+    table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
+    table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
+    table_html += create_table_elements(pharmacy_list)
+
     table_html += "</table>\n"
 
     html_content = f"""
@@ -61,7 +65,7 @@ def create_html_page_with_logo(pharmacy_list):
     <head>
         <title>{html_title}</title>
         <meta http-equiv="refresh" content="60">
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="./styles.css">
     </head>
         <body>
             <p>Aktuelle Uhrzeit: <span id="time-display"></span></p>
@@ -82,7 +86,7 @@ def create_html_page_with_logo(pharmacy_list):
                     const options = {{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }};
 
                     const timeString = currentTime.toLocaleString('de-DE', options);
-                    document.getElementById('time-display').textContent = timeString;
+                    document.getElementById('time-display').textContent = timeString+ ' Uhr';
                 }}
 
                 setInterval(updateTime, 1000); // Update the time every second
@@ -141,6 +145,7 @@ def extract_pharmacy_data_from_table(page):
             "phone": phone,
             "address": f"{street}, {zip_code}, {location}",
             "service_time": service_time,
+            "distance_text": distance_text,
             "distance": distance_value,
         }
 
@@ -198,6 +203,7 @@ def check_json_to_file(json_data, filename1="yesterday.json", filename2="today.j
 
     if json_data != today_json:
         save_json_to_file(today_json, filename1)
+        yesterday_json = today_json
         save_json_to_file(json_data, filename2)
 
 
