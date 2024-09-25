@@ -1,6 +1,9 @@
+# apt install python3.11-venv
+# generate venv pyvenv_wipe
 # pip install python-dotenv
 # pip install playwright
 # playwright install
+# playwright install-deps 
 
 import os
 import json
@@ -59,12 +62,18 @@ def create_html_page_with_logo(pharmacy_list):
 
     table_html += "</table>\n"
 
+    # Get the current date and time
+    unformatted_datetime = datetime.now()
+    # Format the date and time
+    formatted_datetime = unformatted_datetime.strftime("%d:%m:%Y %H:%M:%S")
+
     html_content = f"""
     <!DOCTYPE html>
     <html>
     <head>
         <title>{html_title}</title>
         <meta http-equiv="refresh" content="60">
+        <meta charset="utf-8">
         <link rel="stylesheet" href="./styles.css">
     </head>
         <body>
@@ -75,6 +84,9 @@ def create_html_page_with_logo(pharmacy_list):
                     <h1 style="margin-bottom: 100px;">{html_title}</h1>
                     <img src="Logo_Linden-Apotheke.jpg" style="position: absolute; top: -50px; right: 10px;">
                     {table_html}
+                    <br>
+                    <p>Generated on { formatted_datetime }</p>
+
                 </div>
             </div>
             <script>
@@ -259,7 +271,7 @@ def main():
     create_html_page_with_logo(sorted_pharmacy_list)
 
     # sleep for x minutes
-    # time.sleep(300)
+    time.sleep(300)
 
 
 # Run the script
