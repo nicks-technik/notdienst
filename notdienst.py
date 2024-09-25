@@ -343,8 +343,8 @@ def main():
 
 # Run the script
 if __name__ == "__main__":
-    # while True:
-    main()
+    while True:
+        main()
 
 
 # from jinja2 import Template
