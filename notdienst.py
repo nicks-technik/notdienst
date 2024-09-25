@@ -1,4 +1,25 @@
-# apt install python3.11-venv
+"""
+Pharmacy Scraper: A Python script that scrapes pharmacy data from a webpage,
+sorts the data by distance, and generates an HTML page with the sorted data.
+
+Dependencies:
+- Python 3.11
+- pip
+- python-dotenv
+- playwright
+- Jinja2 (for HTML templating)
+
+Functionality:
+1. Load environment variables from a .env file.
+2. Launch a headless browser using Playwright.
+3. Navigate to the specified webpage and extract pharmacy data from a table.
+4. Sort the extracted data by distance.
+5. Generate an HTML page using Jinja2 template with the sorted data.
+6. Save the HTML page to a specified file.
+7. Sleep for a specified duration before repeating the process.
+"""
+
+# The rest of the Python script follows...# apt install python3.11-venv
 # generate venv pyvenv_wipe
 # pip install python-dotenv
 # pip install playwright
@@ -8,6 +29,8 @@
 import os
 import json
 import time
+
+# import jinja2
 from datetime import datetime
 from dotenv import load_dotenv
 from playwright.sync_api import sync_playwright
@@ -15,8 +38,8 @@ from playwright.sync_api import sync_playwright
 # Load environment variables from .env file
 load_dotenv()
 
-yesterday_json = ""
-today_json = ""
+yesterday_json_data = ""
+today_json_data = ""
 
 
 def create_table_elements(local_pharmacy_list):
@@ -65,7 +88,7 @@ def create_html_page_with_logo(pharmacy_list):
     table_html += "  <tr><th>Apotheke</th><th>Adresse</th>\
         <th>Telefon</th><th>Zeiten</th><th>Luftlinie</th></tr>\n"
 
-    table_html += create_table_elements(yesterday_json)
+    table_html += create_table_elements(yesterday_json_data)
     # table_html += "<tr></tr>\n"
     table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
     table_html += "<tr><td> </td><td> </td><td> </td><td> </td><td> </td></tr>\n"
@@ -223,33 +246,35 @@ def check_json_to_file(json_data, filename1="yesterday.json", filename2="today.j
         filename (str, optional): The name of the file to save the data to. Defaults to "data.json".
     """
 
-    global yesterday_json
-    global today_json
+    global yesterday_json_data
+    global today_json_data
 
     # save_json_to_file(json_data, filename1)
     # save_json_to_file(json_data, filename2)
     # return
 
-    if yesterday_json == "":
-        yesterday_json = load_json_from_file(filename1)
+    if yesterday_json_data == "":
+        yesterday_json_data = load_json_from_file(filename1)
 
-    if today_json == "":
-        today_json = load_json_from_file(filename2)
+    if today_json_data == "":
+        today_json_data = load_json_from_file(filename2)
 
-    if json_data != today_json:
-        save_json_to_file(today_json, filename1)
-        yesterday_json = today_json
+    if json_data != today_json_data:
+        save_json_to_file(today_json_data, filename1)
+        yesterday_json_data = today_json_data
         save_json_to_file(json_data, filename2)
 
 
 def main():
     """
-    The main function that orchestrates the entire process of scraping pharmacy data from a webpage,
-    extracting and sorting the data, and then saving it to JSON files and creating an HTML page.
+    The main function that orchestrates the entire process of scraping pharmacy data
+    from a webpage, extracting and sorting the data, and then saving it to JSON files
+    and creating an HTML page.
 
-    This function uses the Playwright library to launch a headless browser, navigate to the webpage,
-    wait for the pharmacy entries to load, and then extract the data from the table. It then sorts the
-    data by distance and saves it to JSON files. Finally, it creates an HTML page with the sorted data.
+    This function uses the Playwright library to launch a headless browser, navigate
+    to the webpage, wait for the pharmacy entries to load, and then extract the data
+    from the table. It then sorts the data by distance and saves it to JSON files.
+    Finally, it creates an HTML page with the sorted data.
 
     Parameters:
         None
@@ -267,9 +292,11 @@ def main():
         # Get the current date in the format dd.MM.yyyy
         current_date = datetime.now().strftime("%d.%m.%Y")
 
+        start_url = "https://lak-bayern.notdienst-portal.de/blakportal"
         # Construct the full URL with the dynamic date and location from .env
-        full_url = f"https://lak-bayern.notdienst-portal.de/blakportal/?date={current_date}&location={location}"
+        full_url = f"{start_url}/?date={current_date}&location={location}"
         print(full_url)
+
         # Load the webpage
         page.goto(full_url)
 
