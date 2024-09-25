@@ -3,12 +3,29 @@
 # playwright install
 
 import os
+import json
+import time
 from datetime import datetime
 from dotenv import load_dotenv
 from playwright.sync_api import sync_playwright
 
 # Load environment variables from .env file
 load_dotenv()
+
+yesterday_json = ""
+today_json = ""
+
+
+def create_table_elements(local_pharmacy_list):
+    max_table_rows = os.getenv("MAX-TABLE-ROWS")
+
+    for index, pharmacy in enumerate(local_pharmacy_list, start=1):
+        if index > int(max_table_rows):
+            break
+        local_table_html += f"  <tr><td>{pharmacy['name']}</td><td>{pharmacy['address']}</td>\
+        <td>{pharmacy['phone']}</td><td>{pharmacy['service_time']}</td>\
+        <td>{pharmacy['distance']}</td></tr>\n"
+    return local_table_html
 
 
 def create_html_page_with_logo(pharmacy_list):
@@ -23,31 +40,55 @@ def create_html_page_with_logo(pharmacy_list):
     logo_jpg = os.getenv("LOGO-JPG")
     html_title = os.getenv("HTML-TITLE")
 
+    print("Creating HTML page...")
+    # Create the HTML table structure
+    table_html = "<table>\n"
+    table_html += "  <tr><th>Apotheke</th><th>Adresse</th>\
+        <th>Telefon</th><th>Zeiten</th><th>Luftlinie</th></tr>\n"
+    for pharmacy in yesterday_json:
+        table_html += f"  <tr><td>{pharmacy['name']}</td><td>{pharmacy['address']}</td>\
+        <td>{pharmacy['phone']}</td><td>{pharmacy['service_time']}</td>\
+        <td>{pharmacy['distance']}</td></tr>\n"
+    for pharmacy in pharmacy_list:
+        table_html += f"  <tr><td>{pharmacy['name']}</td><td>{pharmacy['address']}</td>\
+        <td>{pharmacy['phone']}</td><td>{pharmacy['service_time']}</td>\
+        <td>{pharmacy['distance']}</td></tr>\n"
+    table_html += "</table>\n"
+
     html_content = f"""
     <!DOCTYPE html>
     <html>
     <head>
         <title>{html_title}</title>
         <meta http-equiv="refresh" content="60">
+        <link rel="stylesheet" href="styles.css">
     </head>
-    <body>
-        <img src="{logo_jpg}" style="position: absolute; top: 10px; left: 10px;">
-        testttt
+        <body>
+            <p>Aktuelle Uhrzeit: <span id="time-display"></span></p>
+
+            <div style="position: relative;">
+                <div style="position: relative; top: 10px; left: 20px;">
+                    <h1 style="margin-bottom: 100px;">{html_title}</h1>
+                    <img src="Logo_Linden-Apotheke.jpg" style="position: absolute; top: -50px; right: 10px;">
+                    {table_html}
+                </div>
+            </div>
+            <script>
+                function updateTime() {{
+                    const currentTime = new Date();
+                    /*
+                    const options = {{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }};
+                    */
+                    const options = {{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }};
+
+                    const timeString = currentTime.toLocaleString('de-DE', options);
+                    document.getElementById('time-display').textContent = timeString;
+                }}
+
+                setInterval(updateTime, 1000); // Update the time every second
+            </script>
     </body>
-    <script>
-        window.addEventListener('load', function() {{
-            if ('fullscreen' in document) {{
-                document.documentElement.requestFullscreen();
-            }} else if ('webkitFullscreen' in document) {{
-                document.documentElement.webkitRequestFullscreen();
-            }} else if ('mozFullScreen' in document) {{
-                document.documentElement.mozRequestFullScreen();
-            }} else if ('msFullscreenElement' in document) {{
-                document.documentElement.msRequestFullscreen();
-            }}
-        }});
-    </script>
-    </html>
+</html>
     """
 
     with open(html_page, "w") as f:
@@ -63,6 +104,8 @@ def sort_pharmacies_by_distance(pharmacy_list):
 
 def extract_pharmacy_data_from_table(page):
     """Extracts pharmacy data from the table with the ID 'fastSearchResultTable'."""
+    time.sleep(5)
+
     pharmacy_list = []
 
     # Find all rows in the table
@@ -105,6 +148,57 @@ def extract_pharmacy_data_from_table(page):
 
     print(pharmacy_list)
     return pharmacy_list
+
+
+def save_json_to_file(json_data, filename):
+    """
+    Save a JSON string to a file.
+
+    Args:
+        json_data (str): The JSON data to be saved.
+        filename (str, optional): The name of the file to save the data to. Defaults to "data.json".
+    """
+    # json_data = '{"name": "John Doe", "age": 35, "email": "john.doe@example.com"}'
+
+    with open(filename, "w") as f:
+        json.dump((json_data), f)
+        # json.dump(json.loads(json_data), f)
+    print(f"JSON data saved to '{filename}' file.")
+
+
+def load_json_from_file(filename):
+    with open(filename, "r") as f:
+        data_json = json.load(f)
+    print(f"Loaded JSON data from '{filename}' file.")
+    print(f"Data: {data_json}")
+    return data_json
+
+
+def check_json_to_file(json_data, filename1="yesterday.json", filename2="today.json"):
+    """
+    Save a JSON string to a file.
+
+    Args:
+        json_data (str): The JSON data to be saved.
+        filename (str, optional): The name of the file to save the data to. Defaults to "data.json".
+    """
+
+    global yesterday_json
+    global today_json
+
+    # save_json_to_file(json_data, filename1)
+    # save_json_to_file(json_data, filename2)
+    # return
+
+    if yesterday_json == "":
+        yesterday_json = load_json_from_file(filename1)
+
+    if today_json == "":
+        today_json = load_json_from_file(filename2)
+
+    if json_data != today_json:
+        save_json_to_file(today_json, filename1)
+        save_json_to_file(json_data, filename2)
 
 
 def main():
@@ -155,9 +249,14 @@ def main():
     else:
         print("No pharmacy data found.")
 
+    check_json_to_file(sorted_pharmacy_list, "yesterday.json", "today.json")
     create_html_page_with_logo(sorted_pharmacy_list)
+
+    # sleep for x minutes
+    # time.sleep(300)
 
 
 # Run the script
 if __name__ == "__main__":
+    # while True:
     main()
