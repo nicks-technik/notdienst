@@ -2,5 +2,4 @@
 /.venv/
 Logo_*.jpg
 notdienst.html
-today.json
-yesterday.json
+*.json
