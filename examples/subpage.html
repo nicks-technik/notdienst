@@ -1,0 +1,7 @@
+<div>
+    <p>This content was last updated at <span id="lastUpdate"></span>.</p>
+    <p>Here's some dynamic content from subpage.html.</p>
+</div>
+<script>
+    document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+</script>
