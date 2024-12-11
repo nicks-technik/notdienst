@@ -1,78 +1,166 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{ html_title }}</title>
-    <meta http-equiv="refresh" content="60">
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="./styles.css">
 
-    <style>
-      th {
-        font-size: larger;
-        background-color: #797979;
-        padding: 10px;
-        text-align: center;
-      }
-      tr:nth-child(even) {
-        font-size: large;
-        background-color: #ffffff;
-      }
-      tr:nth-child(odd) {
-        font-size: large;
-        background-color: #9d9a9a;
-      }
-    </style>
-  </head>
-  <body>
-    <p>Aktuelle Uhrzeit: <span id="time-display"></span></p>
+<head>
+  <title>{{ html_title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="60">
+  <meta charset="utf-8">
+  <!-- <link rel="stylesheet" href="./styles.css"> -->
 
-    <div style="position: relative;">
-      <div style="position: relative; top: 10px; left: 20px;">
-        <h1 style="margin-bottom: 100px;">{{ html_title }}</h1>
-        <img src={{ html_logo }} style="position: absolute; top: -50px; right: 10px;">
-        <div>
-          <table>
-            <tr>
-              <th>From</th>
-              <th>To</th>
-              <th>Name</th>
-              <th>Street</th>
-              <th>Zip Code</th>
-              <th>Location</th>
-              <th>Phone</th>
-            </tr>
-            {% for item in local_pharmacy_list %}
-              <tr>
-                <td>{{ item.from }}</td>
-                <td>{{ item.to }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.street }}</td>
-                <td>{{ item.zipCode }}</td>
-                <td>{{ item.location }}</td>
-                <td>{{ item.phone }}</td>
-              </tr>
-            {% endfor %}
-          </table>
-        </div>
+  <style>
+    body,
+    html {
+      font-size: large;
+      height: 100%;
+      margin: 0;
+      padding: 0 20px;
+      /* Changed from margin to padding */
+      overflow-x: hidden;
+      /* Prevent horizontal scrolling */
+    }
+
+    .container {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      /* Allow horizontal scrolling if table is wider than viewport */
+    }
+
+    table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid #aaaaaa;
+      padding: 10px;
+      text-align: left;
+      word-wrap: break-word;
+      /* background-color: #9d9a9a; */
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      font-size: large;
+      background-color: #ffffff;
+    }
+
+    tr:nth-child(odd) {
+      font-size: large;
+      background-color: #9d9a9a;
+    }
+
+    /* tr {
+      background-color: #f1f1f1;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fff;
+    }
+
+    td {
+      padding-left: 20px;
+      padding-right: 20px;
+    } */
+
+    .time-display {
+      font-size: larger;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      /* padding: 10px 0; */
+    }
+
+    .logo_left {
+      /* position: absolute; */
+      /* width: 300px; */
+      /* Adjust as needed */
+      top: 10px;
+      left: 20px;
+    }
+
+    .logo_right {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+    }
+
+    .footer {
+      font-size: x-small;
+      position: absolute;
+      bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div class="logo_left">
+        <img src="{{ html_logo_left }}">
+      </div>
+      <div>
+        <p class="time-display">Aktuelle Uhrzeit: <span id="time-display"></span></p>
+        <h1>{{ html_title }}</h1>
+      </div>
+      <div>
+        <img src="{{ html_logo_right }}">
       </div>
     </div>
-    <p>Stand: {{ generated_at }}</p>
 
-    <script>
-      function updateTime() {
-          const currentTime = new Date();
-          /*
-          const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-          */
-          const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    <div class="content">
+      <table>
+        <tr>
+          <th>From</th>
+          <th>To</th>
+          <th>Name</th>
+          <th>Street</th>
+          <th>Zip Code</th>
+          <th>Location</th>
+          <th>Phone</th>
+        </tr>
+        {% for item in local_pharmacy_list %}
+        <tr>
+          <td>{{ item.from }}</td>
+          <td>{{ item.to }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.street }}</td>
+          <td>{{ item.zipCode }}</td>
+          <td>{{ item.location }}</td>
+          <td>{{ item.phone }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <div class="footer">
+      <p>Stand: {{ generated_at }}</p>
+    </div>
+  </div>
+  <script>
+    function updateTime() {
+      const currentTime = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
-          const timeString = currentTime.toLocaleString('de-DE', options);
-          document.getElementById('time-display').textContent = timeString;
-      }
+      const timeString = currentTime.toLocaleString('de-DE', options);
+      document.getElementById('time-display').textContent = timeString;
+    }
 
-      setInterval(updateTime, 1000); // Update the time every second
-    </script>
+    setInterval(updateTime, 1000); // Update the time every second
+  </script>
 
-  </body>
+</body>
+
 </html>
-

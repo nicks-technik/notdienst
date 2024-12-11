@@ -53,7 +53,8 @@ def main():
     # Load environment variables from .env file
     html_page = os.getenv("HTML_PAGE")
     html_title = os.getenv("HTML_TITLE")
-    html_logo = os.getenv("HTML_LOGO")
+    html_logo_left = os.getenv("HTML_LOGO_LEFT")
+    html_logo_right = os.getenv("HTML_LOGO_RIGHT")
     html_template = os.getenv("HTML_TEMPLATE")
 
     # scraper = Scraper("https://example.com/pharmacies")
@@ -82,7 +83,7 @@ def main():
         print("No pharmacy data found.")
 
     # Create an HTML page using Jinja2 template
-    html_creator = HtmlCreator(html_page, html_title, html_logo, html_template)
+    html_creator = HtmlCreator(html_page, html_title, html_logo_left, html_logo_right, html_template)
     # Create the content, of the html page
     for pharmacy in pharmacy_list:
         from_date = datetime.strptime(pharmacy["from"], "%Y-%m-%dT%H:%M:%S.%f+00:00")
