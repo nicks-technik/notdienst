@@ -1,4 +1,7 @@
 """
+Start local server:
+python -m http.server 8000
+
 Pharmacy Scraper: A Python script that scrapes pharmacy data from a webpage,
 sorts the data by distance, and generates an HTML page with the sorted data.
 
