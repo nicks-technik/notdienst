@@ -1,3 +1,4 @@
+from scraper import Scraper
 """
 Pharmacy Scraper: A Python script that scrapes pharmacy data from a webpage,
 sorts the data by distance, and generates an HTML page with the sorted data.
@@ -282,42 +283,12 @@ def main():
     Returns:
         None
     """
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
 
-        # Get the location from environment variables
-        location = os.getenv("LOCATION")
 
-        # Get the current date in the format dd.MM.yyyy
-        current_date = datetime.now().strftime("%d.%m.%Y")
-
-        start_url = "https://lak-bayern.notdienst-portal.de/blakportal"
-        # Construct the full URL with the dynamic date and location from .env
-        full_url = f"{start_url}/?date={current_date}&location={location}"
-        print(full_url)
-
-        # Load the webpage
-        page.goto(full_url)
-
-        # Wait until the pharmacy entries are loaded
-        try:
-            page.wait_for_selector(
-                ".searchResultEntry", timeout=10000
-            )  # Timeout set to 10 seconds for loading the entries
-            print("Pharmacy entries found.")  # Debug message for entries found
-        except TimeoutError:
-            print(f"Loading the {full_url} took too long. ")
-            return
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}")
-            return
-
-        # Call the function to extract pharmacy data
-        pharmacy_list = extract_pharmacy_data_from_table(page)
-
-        # Close the browser
-        browser.close()
+def main():
+    scraper = Scraper("https://example.com/pharmacies")
+    scraper.load_page()
+    pharmacy_list = scraper.scrape_pharmacy_data()
 
     # Check if any pharmacies were extracted
     if pharmacy_list:
