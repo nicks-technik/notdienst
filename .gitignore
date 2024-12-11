@@ -5,3 +5,4 @@ notdienst.html
 *.json
 nohup.out
 __pycache__/
+data/apo-logo.jpg
