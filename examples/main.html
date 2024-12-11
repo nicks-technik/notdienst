@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Current Time with Hourly Updates</title>
 </head>
+
 <body>
     <h1>Current Time</h1>
     <div id="clock"></div>
-    
+
     <h2>Hourly Updated Content</h2>
+    <p>This content will update hourly.</p>
     <div id="dynamicContent">
-        <p>This content will update hourly.</p>
     </div>
 
     <script>
@@ -20,21 +22,32 @@
             let hours = now.getHours();
             let minutes = now.getMinutes();
             let seconds = now.getSeconds();
-            
+
             // Add leading zeros if needed
             hours = hours < 10 ? "0" + hours : hours;
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-            
+
             const timeString = `${hours}:${minutes}:${seconds}`;
             document.getElementById('clock').textContent = timeString;
         }
 
         function loadSubpageContent() {
-            fetch('subpage.html')
+            fetch('http://localhost:8000/examples/subpage.html')
                 .then(response => response.text())
                 .then(data => {
+                    console.log('Subpage content loaded:', data);
+                    // Create a new div to hold the subpage content
+
+                    // Clear the existing content of the dynamicContent div
+                    document.getElementById('dynamicContent').innerHTML = '';
+                    console.log('between:');
                     document.getElementById('dynamicContent').innerHTML = data;
+
+                    // Append the new div to the dynamicContent div
+
+                    // Update the last update time
+                    document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
                 })
                 .catch(error => {
                     console.error('Error loading subpage content:', error);
@@ -42,15 +55,17 @@
                 });
         }
 
-        // Update the clock every second
-        setInterval(updateClock, 1000);
+
 
         // Load subpage content immediately and then every hour
         loadSubpageContent();
-        setInterval(loadSubpageContent, 3600000); // 3600000 ms = 1 hour
+        setInterval(loadSubpageContent, 10000); // 3600000 ms = 1 hour
 
         // Initial call to display the time immediately
         updateClock();
+        // Update the clock every second
+        setInterval(updateClock, 1000);
     </script>
 </body>
+
 </html>
