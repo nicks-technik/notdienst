@@ -1,24 +1,78 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>XML Data</title>
+    <title>{{ html_title }}</title>
+    <meta http-equiv="refresh" content="60">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./styles.css">
+
+    <style>
+      th {
+        font-size: larger;
+        background-color: #797979;
+        padding: 10px;
+        text-align: center;
+      }
+      tr:nth-child(even) {
+        font-size: large;
+        background-color: #ffffff;
+      }
+      tr:nth-child(odd) {
+        font-size: large;
+        background-color: #9d9a9a;
+      }
+    </style>
   </head>
   <body>
-    <h1>XML Data</h1>
-    <div>
-      {% for item in data %}
-        <p>{{ item.id }}</p>
-        <p>{{ item.from }}</p>
-        <p>{{ item.to }}</p>
-        <p>{{ item.name }}</p>
-        <p>{{ item.street }}</p>
-        <p>{{ item.zipCode }}</p>
-        <p>{{ item.location }}</p>
-        <p>{{ item.subLocation }}</p>
-        <p>{{ item.phone }}</p>
-        <p>{{ item.lat }}</p>
-        <p>{{ item.lon }}</p>
-      {% endfor %}
+    <p>Aktuelle Uhrzeit: <span id="time-display"></span></p>
+
+    <div style="position: relative;">
+      <div style="position: relative; top: 10px; left: 20px;">
+        <h1 style="margin-bottom: 100px;">{{ html_title }}</h1>
+        <img src={{ html_logo }} style="position: absolute; top: -50px; right: 10px;">
+        <div>
+          <table>
+            <tr>
+              <th>From</th>
+              <th>To</th>
+              <th>Name</th>
+              <th>Street</th>
+              <th>Zip Code</th>
+              <th>Location</th>
+              <th>Phone</th>
+            </tr>
+            {% for item in local_pharmacy_list %}
+              <tr>
+                <td>{{ item.from }}</td>
+                <td>{{ item.to }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.street }}</td>
+                <td>{{ item.zipCode }}</td>
+                <td>{{ item.location }}</td>
+                <td>{{ item.phone }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
     </div>
+    <p>Stand: {{ generated_at }}</p>
+
+    <script>
+      function updateTime() {
+          const currentTime = new Date();
+          /*
+          const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+          */
+          const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+
+          const timeString = currentTime.toLocaleString('de-DE', options);
+          document.getElementById('time-display').textContent = timeString;
+      }
+
+      setInterval(updateTime, 1000); // Update the time every second
+    </script>
+
   </body>
 </html>
+
