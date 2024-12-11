@@ -1,157 +1,249 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Aktuelle Notdienstbereitschaft</title>
-    <meta http-equiv="refresh" content="60">
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="./styles.css">
 
-    <style>
-      th {
-        font-size: larger;
-        background-color: #797979;
-        padding: 10px;
-        text-align: center;
-      }
-      tr:nth-child(even) {
-        font-size: large;
-        background-color: #ffffff;
-      }
-      tr:nth-child(odd) {
-        font-size: large;
-        background-color: #9d9a9a;
-      }
-    </style>
-  </head>
-  <body>
-    <p>Aktuelle Uhrzeit: <span id="time-display"></span></p>
+<head>
+  <title>Aktuelle Notdienstbereitschaft</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="60">
+  <meta charset="utf-8">
+  <!-- <link rel="stylesheet" href="./styles.css"> -->
 
-    <div style="position: relative;">
-      <div style="position: relative; top: 10px; left: 20px;">
-        <h1 style="margin-bottom: 100px;">Aktuelle Notdienstbereitschaft</h1>
-        <img src=apo-logo.jpg style="position: absolute; top: -50px; right: 10px;">
-        <div>
-          <table>
-            <tr>
-              <th>From</th>
-              <th>To</th>
-              <th>Name</th>
-              <th>Street</th>
-              <th>Zip Code</th>
-              <th>Location</th>
-              <th>Phone</th>
-            </tr>
-            
-              <tr>
-                <td>01.01.25 08:30</td>
-                <td>02.01.25 08:30</td>
-                <td>Muster-Name1</td>
-                <td>Muster-Strasse1</td>
-                <td>Muster-PLZ1</td>
-                <td>Muster-Ort1</td>
-                <td>Muster-Telefon1</td>
-              </tr>
-            
-              <tr>
-                <td>01.01.25 08:30</td>
-                <td>02.01.25 08:30</td>
-                <td>Muster-Name1</td>
-                <td>Muster-Strasse2</td>
-                <td>Muster-PLZ2</td>
-                <td>Muster-Ort2</td>
-                <td>Muster-Telefon2</td>
-              </tr>
-            
-              <tr>
-                <td>01.01.25 08:30</td>
-                <td>02.01.25 08:30</td>
-                <td>Muster-Name3</td>
-                <td>Muster-Strasse3</td>
-                <td>Muster-PLZ3</td>
-                <td>Muster-Ort3</td>
-                <td>Muster-Telefon3</td>
-              </tr>
-            
-              <tr>
-                <td>01.01.25 08:30</td>
-                <td>02.01.25 08:30</td>
-                <td>Muster-Name4</td>
-                <td>Muster-Strasse4</td>
-                <td>Muster-PLZ4</td>
-                <td>Muster-Ort4</td>
-                <td>Muster-Telefon4</td>
-              </tr>
-            
-              <tr>
-                <td>02.01.25 08:30</td>
-                <td>03.01.25 08:30</td>
-                <td>Muster-Name5</td>
-                <td>Muster-Strasse5</td>
-                <td>Muster-PLZ5</td>
-                <td>Muster-Ort5</td>
-                <td>Muster-Telefon5</td>
-              </tr>
-            
-              <tr>
-                <td>02.01.25 08:30</td>
-                <td>03.01.25 08:30</td>
-                <td>Muster-Name6</td>
-                <td>Muster-Strasse6</td>
-                <td>Muster-PLZ6</td>
-                <td>Muster-Ort6</td>
-                <td>Muster-Telefon6</td>
-              </tr>
-            
-              <tr>
-                <td>02.01.25 08:30</td>
-                <td>03.01.25 08:30</td>
-                <td>Muster-Name7</td>
-                <td>Muster-Strasse7</td>
-                <td>Muster-PLZ7</td>
-                <td>Muster-Ort7</td>
-                <td>Muster-Telefon7</td>
-              </tr>
-            
-              <tr>
-                <td>02.01.25 08:30</td>
-                <td>03.01.25 08:30</td>
-                <td>Muster-Name8</td>
-                <td>Muster-Strasse8</td>
-                <td>Muster-PLZ8</td>
-                <td>Muster-Ort8</td>
-                <td>Muster-Telefon8</td>
-              </tr>
-            
-              <tr>
-                <td>03.01.25 08:30</td>
-                <td>04.01.25 08:30</td>
-                <td>Muster-Name9</td>
-                <td>Muster-Strasse9</td>
-                <td>Muster-PLZ9</td>
-                <td>Muster-Ort9</td>
-                <td>Muster-Telefon9</td>
-              </tr>
-            
-          </table>
-        </div>
+  <style>
+    body,
+    html {
+      font-size: large;
+      height: 100%;
+      margin: 0;
+      padding: 0 5px;
+      /* Changed from margin to padding */
+      overflow-x: hidden;
+      /* Prevent horizontal scrolling */
+    }
+
+    .container {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: auto;
+      /* Allow horizontal scrolling if table is wider than viewport */
+    }
+
+    table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid #aaaaaa;
+      padding: 10px;
+      text-align: left;
+      word-wrap: break-word;
+      /* background-color: #9d9a9a; */
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+    }
+
+    tr:nth-child(even) {
+      font-size: large;
+      background-color: #ffffff;
+    }
+
+    tr:nth-child(odd) {
+      font-size: large;
+      background-color: #9d9a9a;
+    }
+
+    /* tr {
+      background-color: #f1f1f1;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fff;
+    }
+
+    td {
+      padding-left: 20px;
+      padding-right: 20px;
+    } */
+
+    .time-display {
+      font-size: larger;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      /* padding: 10px 0; */
+    }
+
+    .logo_left {
+      /* position: absolute; */
+      /* width: 300px; */
+      /* Adjust as needed */
+      top: 10px;
+      left: 20px;
+    }
+
+    .logo_right {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+    }
+
+    .footer {
+      font-size: x-small;
+      position: absolute;
+      bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div class="logo_left">
+        <img src="apo-logo.jpg">
+      </div>
+      <div>
+        <p class="time-display">Aktuelle Uhrzeit: <span id="time-display"></span></p>
+        <h1>Aktuelle Notdienstbereitschaft</h1>
+      </div>
+      <div>
+        <img src="logo-aplus.png">
       </div>
     </div>
-    <p>Stand: 2024-12-11 06:12:45</p>
 
-    <script>
-      function updateTime() {
-          const currentTime = new Date();
-          /*
-          const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-          */
-          const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    <div class="content">
+      <table>
+        <tr>
+          <th>From</th>
+          <th>To</th>
+          <th>Name</th>
+          <th>Street</th>
+          <th>Zip Code</th>
+          <th>Location</th>
+          <th>Phone</th>
+        </tr>
+        
+        <tr>
+          <td>01.01.25 08:30</td>
+          <td>02.01.25 08:30</td>
+          <td>Muster-Name1</td>
+          <td>Muster-Strasse1</td>
+          <td>Muster-PLZ1</td>
+          <td>MusterMusterMuster-Ort1</td>
+          <td>Muster-Telefon1</td>
+        </tr>
+        
+        <tr>
+          <td>01.01.25 08:30</td>
+          <td>02.01.25 08:30</td>
+          <td>Muster-Name1</td>
+          <td>MusterMuste-Strasse2Strasse2Strasse2Strasse2</td>
+          <td>Muster-PLZ2</td>
+          <td>Muster-Ort2</td>
+          <td>Muster-Telefon2</td>
+        </tr>
+        
+        <tr>
+          <td>01.01.25 08:30</td>
+          <td>02.01.25 08:30</td>
+          <td>Muster-Name3</td>
+          <td>Muster-Strasse3</td>
+          <td>Muster-PLZ3</td>
+          <td>Muster-Ort3</td>
+          <td>Muster-Telefon3</td>
+        </tr>
+        
+        <tr>
+          <td>01.01.25 08:30</td>
+          <td>02.01.25 08:30</td>
+          <td>Muster-Name4</td>
+          <td>Muster-Strasse4</td>
+          <td>Muster-PLZ4</td>
+          <td>Muster-Ort4</td>
+          <td>Muster-Telefon4</td>
+        </tr>
+        
+        <tr>
+          <td>02.01.25 08:30</td>
+          <td>03.01.25 08:30</td>
+          <td>Muster-Name5</td>
+          <td>Muster-Strasse5</td>
+          <td>Muster-PLZ5</td>
+          <td>Muster-Ort5</td>
+          <td>Muster-Telefon5</td>
+        </tr>
+        
+        <tr>
+          <td>02.01.25 08:30</td>
+          <td>03.01.25 08:30</td>
+          <td>Muster-Name6</td>
+          <td>Muster-Strasse6</td>
+          <td>Muster-PLZ6</td>
+          <td>Muster-Ort6</td>
+          <td>Muster-Telefon6</td>
+        </tr>
+        
+        <tr>
+          <td>02.01.25 08:30</td>
+          <td>03.01.25 08:30</td>
+          <td>Muster-Name7</td>
+          <td>Muster-Strasse7</td>
+          <td>Muster-PLZ7</td>
+          <td>Muster-Ort7</td>
+          <td>Muster-Telefon7</td>
+        </tr>
+        
+        <tr>
+          <td>02.01.25 08:30</td>
+          <td>03.01.25 08:30</td>
+          <td>Muster-Name8</td>
+          <td>Muster-Strasse8</td>
+          <td>Muster-PLZ8</td>
+          <td>Muster-Ort8</td>
+          <td>Muster-Telefon8</td>
+        </tr>
+        
+        <tr>
+          <td>03.01.25 08:30</td>
+          <td>04.01.25 08:30</td>
+          <td>Muster-Name9</td>
+          <td>Muster-Strasse9</td>
+          <td>Muster-PLZ9</td>
+          <td>Muster-Ort9</td>
+          <td>Muster-Telefon9</td>
+        </tr>
+        
+      </table>
+    </div>
+    <div class="footer">
+      <p>Stand: 11.12.2024 12:50:08</p>
+    </div>
+  </div>
+  <script>
+    function updateTime() {
+      const currentTime = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
-          const timeString = currentTime.toLocaleString('de-DE', options);
-          document.getElementById('time-display').textContent = timeString;
-      }
+      const timeString = currentTime.toLocaleString('de-DE', options);
+      document.getElementById('time-display').textContent = timeString;
+    }
 
-      setInterval(updateTime, 1000); // Update the time every second
-    </script>
+    setInterval(updateTime, 1000); // Update the time every second
+  </script>
 
-  </body>
+</body>
+
 </html>
