@@ -94,6 +94,58 @@ class Scraper:
 
     
 # MY STUFF
+
+# def extract_pharmacy_data_from_table(page):
+#     """Extracts pharmacy data from the table with the ID 'fastSearchResultTable'."""
+#     time.sleep(5)
+
+#     pharmacy_list = []
+
+#     # Find all rows in the table
+#     # print(page.content())
+#     # Find all rows with the class 'searchResultEntry'
+#     rows = page.query_selector_all(".searchResultEntry")
+
+#     print(
+#         f"Found {len(rows)} pharmacy entries."
+#     )  # Debug message to check if rows are found
+
+#     # Iterate through each row and extract the details
+#     for index, row in enumerate(rows, start=0):
+#         name = row.query_selector(".name").inner_text()
+#         phone = row.query_selector(".phone").inner_text()
+#         street = row.query_selector(".street").inner_text()
+#         zip_code = row.query_selector(".zipCode").inner_text()
+#         location = row.query_selector(".location").inner_text()
+#         service_time = row.query_selector(".serviceTime").inner_text()
+#         # distance_text = row.query_selector(
+#         #     ".distance"
+#         # ).inner_text()  # Assuming the class for distance is 'distance'
+#         # Extract the numerical part of the distance and convert it to float
+#         distance_selector = f"#distance-{index}"
+#         distance_text = page.query_selector(distance_selector).inner_text()
+#         print(distance_text)
+#         distance_value = float(distance_text.replace(" km", "").replace(",", "."))
+#         print(distance_value)
+
+#         # Store the pharmacy data in a list
+#         pharmacy_data = {
+#             "name": name,
+#             "phone": phone,
+#             "address": f"{street}, {zip_code}, {location}",
+#             "service_time": service_time,
+#             "distance_text": distance_text,
+#             "distance": distance_value,
+#         }
+
+#         pharmacy_list.append(pharmacy_data)
+
+#     print(pharmacy_list)
+#     return pharmacy_list
+
+
+
+
     # with sync_playwright() as p:
     #     browser = p.chromium.launch(headless=True)
     #     page = browser.new_page()

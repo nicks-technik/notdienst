@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>XML Data</title>
+  </head>
+  <body>
+    <h1>XML Data</h1>
+    <div>
+      {% for item in data %}
+        <p>{{ item.id }}</p>
+        <p>{{ item.from }}</p>
+        <p>{{ item.to }}</p>
+        <p>{{ item.name }}</p>
+        <p>{{ item.street }}</p>
+        <p>{{ item.zipCode }}</p>
+        <p>{{ item.location }}</p>
+        <p>{{ item.subLocation }}</p>
+        <p>{{ item.phone }}</p>
+        <p>{{ item.lat }}</p>
+        <p>{{ item.lon }}</p>
+      {% endfor %}
+    </div>
+  </body>
+</html>
