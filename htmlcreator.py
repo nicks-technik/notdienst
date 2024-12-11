@@ -1,6 +1,7 @@
-import html
-from jinja2 import Template
 import os
+import html
+from datetime import datetime
+from jinja2 import Template
 
 class HtmlCreator:
     """A class used to create an HTML page with a logo image in the top left corner.
@@ -40,9 +41,14 @@ class HtmlCreator:
         # Load the Jinja2 template
         template = Template(open(self.html_template, 'r').read())
         # Extract the data from the XML
-        data = local_pharmacy_list
+        data = {
+            'local_pharmacy_list': local_pharmacy_list,
+            'html_logo': self.html_logo,
+            'html_title': self.html_title,
+            'generated_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
         # Render the template with the data
-        html_page_content = template.render(data=data)
+        html_page_content = template.render(**data)
         # Print the rendered HTML
         print(html_page_content)
         return html_page_content

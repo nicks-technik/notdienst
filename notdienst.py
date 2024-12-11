@@ -30,6 +30,7 @@ import html
 import os
 import json
 import time
+import datetime
 
 # import jinja2
 from datetime import datetime
@@ -83,6 +84,12 @@ def main():
     # Create an HTML page using Jinja2 template
     html_creator = HtmlCreator(html_page, html_title, html_logo, html_template)
     # Create the content, of the html page
+    for pharmacy in pharmacy_list:
+        from_date = datetime.strptime(pharmacy["from"], "%Y-%m-%dT%H:%M:%S.%f+00:00")
+        to_date = datetime.strptime(pharmacy["to"], "%Y-%m-%dT%H:%M:%S.%f+00:00")
+        
+        pharmacy["from"] = from_date.strftime("%d.%m.%y %H:%M")
+        pharmacy["to"] = to_date.strftime("%d.%m.%y %H:%M")
     html_page_detail_content = html_creator.create_html(pharmacy_list)
 
     # Save the HTML page content to the specified file
