@@ -1,6 +1,7 @@
 .env
 /.venv/
-Logo_*.jpg
+*.jpg
+*.png
 notdienst.html
 *.json
 nohup.out
