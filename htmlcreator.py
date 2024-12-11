@@ -7,7 +7,7 @@ class HtmlCreator:
     """A class used to create an HTML page with a logo image in the top left corner.
     """
 
-    def __init__(self, html_page, html_title, html_logo, html_template):
+    def __init__(self, html_page, html_title, html_logo_left, html_logo_right, html_template):
         """
         Initializes the HtmlCreator object with the necessary parameters.
 
@@ -18,7 +18,8 @@ class HtmlCreator:
         """
         self.html_page = html_page
         self.html_title = html_title
-        self.html_logo = html_logo
+        self.html_logo_left = html_logo_left
+        self.html_logo_right = html_logo_right
         self.html_template = html_template
 
 
@@ -43,9 +44,10 @@ class HtmlCreator:
         # Extract the data from the XML
         data = {
             'local_pharmacy_list': local_pharmacy_list,
-            'html_logo': self.html_logo,
+            'html_logo_left': self.html_logo_left,
+            'html_logo_right': self.html_logo_right,
             'html_title': self.html_title,
-            'generated_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            'generated_at': datetime.now().strftime("%d.%m.%Y %H:%M:%S")
         }
         # Render the template with the data
         html_page_content = template.render(**data)
