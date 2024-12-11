@@ -4,3 +4,4 @@ Logo_*.jpg
 notdienst.html
 *.json
 nohup.out
+__pycache__/
