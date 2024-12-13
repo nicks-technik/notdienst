@@ -182,3 +182,12 @@ class Scraper:
 
     #     # Close the browser
     #     browser.close()
+
+# main function
+if __name__ == "__main__
+
+    # Call the main function
+    scraper = Scraper("https://example.com/pharmacies")
+    scraper.load_page()
+    pharmacy_list = scraper.scrape_pharmacy_data()
+
