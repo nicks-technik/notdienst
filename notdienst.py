@@ -29,25 +29,58 @@ Functionality:
 # playwright install
 # playwright install-deps
 
-import html
 import os
 import json
 import time
-import datetime
+import html
 
-# import jinja2
 from datetime import datetime
 from dotenv import load_dotenv
 # from playwright.sync_api import sync_playwright
-# from scraper import Scraper
-from importapidata import ImportApiData
 
+from importapidata import ImportApiData
 from htmlcreator import HtmlCreator
+
 # Load environment variables from .env file
 load_dotenv()
 
 yesterday_json_data = ""
 today_json_data = ""
+
+
+def haversine(lat1, lon1, lat2, lon2):
+    """
+    Calculate the distance between two points on the Earth using the Haversine formula.
+
+    Parameters:
+    lat1 (float): Latitude of the first point in degrees.
+    lon1 (float): Longitude of the first point in degrees.
+    lat2 (float): Latitude of the second point in degrees.
+    lon2 (float): Longitude of the second point in degrees.
+
+    Returns:
+    float: The distance between the two points in kilometers.
+
+    # Example usage:
+    lat1, lon1 = 52.2296756, 21.0122287  # Warsaw
+    lat2, lon2 = 41.8919300, 12.5113300  # Rome
+    """
+
+    from math import radians, sin, cos, sqrt, atan2
+
+    # Convert latitude and longitude from degrees to radians
+    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+
+    # Haversine formula
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    R = 6371  # Radius of Earth in kilometers
+    distance = R * c
+
+    # print("Distance:", haversine(lat1, lon1, lat2, lon2), "km")
+    return distance
 
 
 
@@ -60,14 +93,15 @@ def main():
     html_logo_right = os.getenv("HTML_LOGO_RIGHT")
     html_template = os.getenv("HTML_TEMPLATE")
 
-    # scraper = Scraper("https://example.com/pharmacies")
-    # scraper.load_page()
-    # pharmacy_list = scraper.scrape_pharmacy_data()
+    lat_here = os.getenv("LAT_HERE")
+    lon_here = os.getenv("LON_HERE")
 
     api_url = os.getenv("API_URL")
+    
     importer = ImportApiData(api_url)
     pharmacy_list = importer.import_data()
     print(pharmacy_list)
+
     # importer.save_xml_to_file(pharmacy_list, os.getenv("JSON_FILE"))
 
     # Check if any pharmacies were extracted
@@ -94,6 +128,7 @@ def main():
         
         pharmacy["from"] = from_date.strftime("%d.%m.%y %H:%M")
         pharmacy["to"] = to_date.strftime("%d.%m.%y %H:%M")
+
     html_page_detail_content = html_creator.create_html(pharmacy_list)
 
     # Save the HTML page content to the specified file
