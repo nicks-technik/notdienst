@@ -47,6 +47,30 @@ load_dotenv()
 yesterday_json_data = ""
 today_json_data = ""
 
+def generate_location_qr_code(lat, lon, filename="location_qr_code.png"):
+    """
+    Generate a QR Code for the given latitude and longitude and save it as an image.
+
+    Parameters:
+    lat (float): Latitude in degrees.
+    lon (float): Longitude in degrees.
+    filename (str): The name of the output image file. Defaults to "location_qr_code.png".
+    """
+    import qrcode
+
+    # Google Maps URL format
+    google_maps_url = f"https://www.google.com/maps?q={lat},{lon}"
+
+    # Generate QR Code
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr.add_data(google_maps_url)
+    qr.make(fit=True)
+
+    # Create an image of the QR code
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save(filename)
+
+    print(f"QR Code generated and saved as '{filename}'")
 
 def haversine(lat1, lon1, lat2, lon2):
     """
