@@ -1,7 +1,7 @@
 import os
 import html
 from datetime import datetime
-from jinja2 import Template
+from jinja2 import Environment, FileSystemLoader
 
 class HtmlCreator:
     """A class used to create an HTML page with a logo image in the top left corner.
@@ -39,8 +39,15 @@ class HtmlCreator:
         Returns:
             str: The rendered HTML page as a string.
         """
-        # Load the Jinja2 template
-        template = Template(open(self.html_template, 'r').read())
+        # Load the template from its fixed directory via FileSystemLoader -
+        # the template source is always a file on disk, never dynamic
+        # content. Autoescape is on: the duty data comes from an upstream
+        # API and must never be injected as raw HTML.
+        env = Environment(
+            loader=FileSystemLoader(os.path.dirname(self.html_template) or '.'),
+            autoescape=True,
+        )
+        template = env.get_template(os.path.basename(self.html_template))
         # Extract the data from the XML
         data = {
             'local_pharmacy_list': local_pharmacy_list,
